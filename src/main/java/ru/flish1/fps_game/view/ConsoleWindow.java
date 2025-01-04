@@ -14,21 +14,29 @@ public class ConsoleWindow {
     private final int height = 40;
     private final int fontSize = 12;
     private final String fontFamily = "Courier New";
-    private Terminal terminal;
-    private final DefaultTerminalFactory factory;
+    private final Terminal terminal;
 
-    public ConsoleWindow(){
-        Font myFont = new Font(fontFamily, Font.PLAIN, fontSize); // Change the number 20 to your desired font size
-        SwingTerminalFontConfiguration myFontConfiguration = SwingTerminalFontConfiguration.newInstance(myFont);
-        factory = new DefaultTerminalFactory();
+    public ConsoleWindow() throws IOException {
+
+        DefaultTerminalFactory factory = new DefaultTerminalFactory();
+        setTerminalFactoryOptional(factory);
+        terminal = factory.createTerminal();
+    }
+
+    private void setTerminalFactoryOptional(DefaultTerminalFactory factory) {
         factory.setTerminalEmulatorFrameAutoCloseTrigger(TerminalEmulatorAutoCloseTrigger.CloseOnExitPrivateMode);
         factory.setInitialTerminalSize(new TerminalSize(width, height));
         factory.setForceAWTOverSwing(false);
-        factory.setTerminalEmulatorFontConfiguration(myFontConfiguration);
+        factory.setTerminalEmulatorFontConfiguration(getSwingFont());
     }
 
-    public Terminal createTerminal() throws IOException {
-        return factory.createTerminal();
+    private SwingTerminalFontConfiguration getSwingFont() {
+        Font myFont = new Font(fontFamily, Font.PLAIN, fontSize);
+        return SwingTerminalFontConfiguration.newInstance(myFont);
+    }
+
+    public Terminal getTerminal() {
+        return terminal;
     }
 
     public int getWidth() {
