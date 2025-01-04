@@ -15,12 +15,13 @@ public class ConsoleWindow {
     private final int fontSize = 12;
     private final String fontFamily = "Courier New";
     private final Terminal terminal;
+    private double elapsedTime;
 
     public ConsoleWindow() throws IOException {
-
         DefaultTerminalFactory factory = new DefaultTerminalFactory();
         setTerminalFactoryOptional(factory);
         terminal = factory.createTerminal();
+        terminal.setCursorVisible(false);
     }
 
     private void setTerminalFactoryOptional(DefaultTerminalFactory factory) {
@@ -45,5 +46,13 @@ public class ConsoleWindow {
 
     public int getHeight() {
         return height;
+    }
+
+    public double getElapsedTime() {
+        return elapsedTime;
+    }
+
+    public void setElapsedTime(double elapsedTime) {
+        this.elapsedTime = elapsedTime;
     }
 }

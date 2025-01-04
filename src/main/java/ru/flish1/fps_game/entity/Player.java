@@ -4,11 +4,13 @@ public class Player {
     private double positionX = 0.0;
     private double positionY = 0.0;
     private double angelView = 0.0;
+    private double fov = Math.PI / 2.0;
+    private char charPlayer = 'P';
     private Runnable callback;
+
 
     public void setCallback(Runnable callback) {
         this.callback = callback;
-        System.out.println(12);
     }
 
     public double getPositionX() {
@@ -42,5 +44,21 @@ public class Player {
         if (callback != null) {
             callback.run();
         }
+    }
+
+    public double getFov() {
+        return fov;
+    }
+
+    public void setFov(double fov) {
+        this.fov = fov;
+    }
+
+    public char getCharPlayer() {
+        return charPlayer;
+    }
+
+    public void setCharPlayer(char charPlayer) {
+        this.charPlayer = charPlayer;
     }
 }
