@@ -51,7 +51,7 @@ public class DetectMovePlayer extends Thread {
     private void changeCordS() {
         player.setPositionX(player.getPositionX() - Math.sin(player.getAngelView()) * valueChangeCord * consoleWindow.getElapsedTime());
         player.setPositionY(player.getPositionY() - Math.cos(player.getAngelView()) * valueChangeCord * consoleWindow.getElapsedTime());
-        if (mapGame.getMap()[(int) player.getPositionY()].charAt((int) player.getPositionX()) == '#') {
+        if ((player.getPositionY() >= 0 && player.getPositionX() >= 0) && mapGame.getMap()[(int) player.getPositionY()].charAt((int) player.getPositionX()) == '#') {
             player.setPositionX(player.getPositionX() + Math.sin(player.getAngelView()) * valueChangeCord * consoleWindow.getElapsedTime());
             player.setPositionY(player.getPositionY() + Math.cos(player.getAngelView()) * valueChangeCord * consoleWindow.getElapsedTime());
         }
@@ -60,7 +60,7 @@ public class DetectMovePlayer extends Thread {
     private void changeCordW() {
         player.setPositionX(player.getPositionX() + Math.sin(player.getAngelView()) * valueChangeCord * consoleWindow.getElapsedTime());
         player.setPositionY(player.getPositionY() + Math.cos(player.getAngelView()) * valueChangeCord * consoleWindow.getElapsedTime());
-        if (mapGame.getMap()[(int) player.getPositionY()].charAt((int) player.getPositionX()) == '#') {
+        if ((player.getPositionY() >= 0 && player.getPositionX() >= 0) && mapGame.getMap()[(int) player.getPositionY()].charAt((int) player.getPositionX()) == '#') {
             player.setPositionX(player.getPositionX() - Math.sin(player.getAngelView()) * valueChangeCord * consoleWindow.getElapsedTime());
             player.setPositionY(player.getPositionY() - Math.cos(player.getAngelView()) * valueChangeCord * consoleWindow.getElapsedTime());
         }

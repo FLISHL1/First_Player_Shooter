@@ -24,7 +24,10 @@ public class RenderingGraphics extends Thread {
 
     private void paintMap(Player player) throws IOException {
         String[] mapWithPlayer = mapGame.getMap().clone();
-        char[] row = mapWithPlayer[(int) player.getPositionY()].toCharArray();
+        char[] row = new char[1];
+        if (player.getPositionY() < mapWithPlayer.length && player.getPositionY() >= 0) {
+            row = mapWithPlayer[(int) player.getPositionY()].toCharArray();
+        } else return;
         row[(int) player.getPositionX()] = player.getCharPlayer();
         mapWithPlayer[(int) player.getPositionY()] = String.valueOf(row);
         for (int i = 1; i <= mapWithPlayer.length; i++) {
@@ -42,6 +45,7 @@ public class RenderingGraphics extends Thread {
 
     private void repaintWindow() {
         try {
+            double fDistanceOfWall = 0;
             for (int x = 0; x < consoleWindow.getWidth(); x++) {
 
                 // Угол куда смотрит игрок
@@ -49,7 +53,7 @@ public class RenderingGraphics extends Thread {
                 double fEyeX = Math.sin(fRayAngle);
                 double fEyeY = Math.cos(fRayAngle);
                 double changeDistanceOfWall = 0.1;
-                double fDistanceOfWall = calcDistanceOfWall(false, 0, changeDistanceOfWall, fEyeX, fEyeY);
+                fDistanceOfWall = calcDistanceOfWall(false, 0, changeDistanceOfWall, fEyeX, fEyeY);
 
                 int nCeiling = (int) ((consoleWindow.getHeight() / 2.0) - consoleWindow.getHeight() / fDistanceOfWall);
                 int nFloor = consoleWindow.getHeight() - nCeiling;
@@ -65,12 +69,16 @@ public class RenderingGraphics extends Thread {
             }
 
             paintMap(player);
-            terminal.setCursorPosition(0, 0);
-            terminal.putString(String.format("X=%(.2f), Y=%(.2f), A=%(.2f), FPS=%(.2f)", player.getPositionX(), player.getPositionY(), player.getAngelView(), 1 / consoleWindow.getElapsedTime()));
+            printStatistic(fDistanceOfWall);
             terminal.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void printStatistic(double fDistanceOfWall) throws IOException {
+        terminal.setCursorPosition(0, 0);
+        terminal.putString(String.format("X=(%(.2f), Y=(%(.2f), A=(%(.2f), FPS=(%(.2f), FDist=(%(.2f)", player.getPositionX(), player.getPositionY(), player.getAngelView(), 1 / consoleWindow.getElapsedTime(), fDistanceOfWall));
     }
 
     private char calcCharFloor(int y) throws IOException {
@@ -107,6 +115,7 @@ public class RenderingGraphics extends Thread {
     }
 
     private double calcDistanceOfWall(boolean bHitWall, double fDistanceOfWall, double changeDistanceOfWall, double fEyeX, double fEyeY) {
+
         while (!bHitWall && fDistanceOfWall < mapGame.calcDepth()) {
             fDistanceOfWall += changeDistanceOfWall;
             int nTestX = (int) (player.getPositionX() + fEyeX * fDistanceOfWall);
